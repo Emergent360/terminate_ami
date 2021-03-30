@@ -1,2 +1,8 @@
 ---
 # tasks file for terminate_ami
+- name: Terminate EC2 instances
+  ec2:
+    region: "{{ ec2_region }}"
+    state: absent
+    wait: true
+    wait_timeout: "{{ 300 | int}}"

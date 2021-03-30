@@ -1,2 +1,4 @@
 ---
 # defaults file for terminate_ami
+ec2_name_prefix: Test
+ec2_region: us-east-1
