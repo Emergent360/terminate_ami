@@ -1,8 +1,29 @@
 ---
 # tasks file for terminate_ami
+- name: Get the VPC ID for {{ ec2_name_prefix }}-vpc
+  ec2_vpc_net_info:
+    filters:
+      "tag:Name": "{{ ec2_name_prefix }}-vpc"
+    region: "{{ ec2_region }}"
+  register: vpc_net_facts
+
+- name: Set ec2_vpc_id value
+  set_fact:
+    ec2_vpc_id: "{{vpc_net_facts.vpcs[0].id|default('WORKSHOP_UNDEF')}}"
+
+- name: Get EC2 instance info for {{ ec2_name_prefix }}-vpc
+  ec2_instance_info:
+    region: "{{ ec2_region }}"
+    filters:
+      "vpc-id": "{{ec2_vpc_id}}"
+  register: all_vpc_instances
+
 - name: Terminate EC2 instances
   ec2:
     region: "{{ ec2_region }}"
     state: absent
+    instance_ids: "{{ all_vpc_instances.instances | map(attribute='instance_id') | list }}"
     wait: true
     wait_timeout: "{{ 300 | int}}"
+  register: result_ec2_destroy
+  when: all_vpc_instances.instances
