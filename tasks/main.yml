@@ -15,7 +15,9 @@
   ec2_instance_info:
     region: "{{ ec2_region }}"
     filters:
-      "vpc-id": "{{ec2_vpc_id}}"
+      "vpc-id": "{{ ec2_vpc_id }}"
+      "tag:Zone": "{{ zone }}"
+      "tag:Tier": "{{ tier }}"
   register: all_vpc_instances
 
 - name: Terminate EC2 instances
