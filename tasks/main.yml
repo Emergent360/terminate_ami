@@ -19,7 +19,7 @@
       "tag:Zone": "{{ zone | default(omit) }}"
       "tag:Tier": "{{ tier | default(omit) }}"
       "tag:Platform": "{{ platform | default(omit) }}"
-      "tag:Name": "{{ name | default(omit) }}"
+      "tag:Name": "{{ instance_name | default(omit) }}"
   register: all_vpc_instances
 
 - name: Terminate EC2 instances
