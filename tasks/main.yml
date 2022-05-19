@@ -1,7 +1,7 @@
 ---
 # tasks file for terminate_ami
 - name: Get the VPC ID for {{ ec2_name_prefix }}-vpc
-  ec2_vpc_net_info:
+  amazon.aws.ec2_vpc_net_info:
     filters:
       "tag:Name": "{{ ec2_name_prefix }}-vpc"
     region: "{{ ec2_region }}"
@@ -23,7 +23,7 @@
   register: all_vpc_instances
 
 - name: Terminate EC2 instances
-  ec2_instance:
+  amazon.aws.ec2_instance:
     region: "{{ ec2_region }}"
     state: absent
     instance_ids: "{{ all_vpc_instances.instances | map(attribute='instance_id') | list }}"
